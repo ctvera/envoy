@@ -2088,7 +2088,8 @@ bool BaseDynamicClusterImpl::updateDynamicHostList(
 
       // If we are depending on a health checker, we initialize to unhealthy.
       if (health_checker_ != nullptr && !host->disableActiveHealthCheck()) {
-        host->healthFlagSet(Host::HealthFlag::FAILED_ACTIVE_HC);
+        // TODO(oblazek) make this configurable in protobuffs
+        //host->healthFlagSet(Host::HealthFlag::FAILED_ACTIVE_HC);
 
         // If we want to exclude hosts until they have been health checked, mark them with
         // a flag to indicate that they have not been health checked yet.
