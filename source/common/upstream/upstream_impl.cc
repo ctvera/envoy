@@ -2443,7 +2443,8 @@ bool BaseDynamicClusterImpl::updateDynamicHostList(
           host->healthFlagsSetAll(existing_host_statuses & active_hc_statuses_mask);
         } else {
           // No previous known host, mark it as failed active HC.
-          host->healthFlagSet(Host::HealthFlag::FAILED_ACTIVE_HC);
+          // TODO(oblazek) make this configurable in protobuffs
+          // host->healthFlagSet(Host::HealthFlag::FAILED_ACTIVE_HC);
 
           // If we want to exclude hosts until they have been health checked, mark them with
           // a flag to indicate that they have not been health checked yet.
