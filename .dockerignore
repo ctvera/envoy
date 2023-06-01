@@ -5,6 +5,7 @@
 !/distribution/docker
 !/configs/google-vrp
 !/configs/*yaml
+!/linux/amd64/envoy
 !/linux/amd64/release.tar.zst
 !/linux/amd64/schema_validator_tool
 !/linux/amd64/router_check_tool
