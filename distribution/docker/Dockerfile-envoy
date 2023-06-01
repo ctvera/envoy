@@ -10,7 +10,8 @@ ADD configs/envoyproxy_io_proxy.yaml /etc/envoy/envoy.yaml
 # See https://github.com/docker/buildx/issues/510 for why this _must_ be this way
 ARG TARGETPLATFORM
 ENV TARGETPLATFORM="${TARGETPLATFORM:-linux/amd64}"
-ADD "${TARGETPLATFORM}/release.tar.zst" /usr/local/bin/
+#ADD "${TARGETPLATFORM}/release.tar.zst" /usr/local/bin/
+ADD "${TARGETPLATFORM}/envoy" /usr/local/bin/
 
 
 # STAGE: envoy-base
@@ -39,8 +40,8 @@ COPY --from=binary --chown=0:0 --chmod=644 \
     /etc/envoy/envoy.yaml /etc/envoy/envoy.yaml
 COPY --from=binary --chown=0:0 --chmod=755 \
     /docker-entrypoint.sh /
-COPY --from=binary --chown=0:0 --chmod=755 \
-    /usr/local/bin/utils/su-exec /usr/local/bin/
+#COPY --from=binary --chown=0:0 --chmod=755 \
+#    /usr/local/bin/utils/su-exec /usr/local/bin/
 ARG ENVOY_BINARY=envoy
 ARG ENVOY_BINARY_PREFIX=
 COPY --from=binary --chown=0:0 --chmod=755 \
