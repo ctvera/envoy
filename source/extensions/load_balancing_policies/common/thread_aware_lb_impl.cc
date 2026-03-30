@@ -21,6 +21,7 @@ void normalizeHostWeights(const HostVector& hosts, double normalized_locality_we
   // and making sure there was no overflow
   uint64_t sum = 0;
   for (const auto& host : hosts) {
+    if (host == nullptr) continue;
     sum += host->weight();
     if (sum > std::numeric_limits<uint32_t>::max()) {
       IS_ENVOY_BUG("weights should have been previously validated in validateEndpoints()");
@@ -29,6 +30,7 @@ void normalizeHostWeights(const HostVector& hosts, double normalized_locality_we
   }
 
   for (const auto& host : hosts) {
+    if (host == nullptr) continue;
     const double weight = host->weight() * normalized_locality_weight / sum;
     normalized_host_weights.push_back({host, weight});
     min_normalized_weight = std::min(min_normalized_weight, weight);
@@ -362,10 +364,16 @@ TypedHashLbConfigBase::TypedHashLbConfigBase(absl::Span<const HashPolicyProto* c
 absl::Status TypedHashLbConfigBase::validateEndpoints(const PriorityState& priorities) const {
 
   for (const auto& [hosts, locality_weights_map] : priorities) {
+    if (hosts == nullptr) {
+      return absl::InvalidArgumentError("Host vector for a locality is null");
+    }
     // Sum should be at most uint32_t max value, so we can validate it by accumulating into uint64_t
     // and making sure there was no overflow.
     uint64_t host_sum = 0;
     for (const auto& host : *hosts) {
+      if (host == nullptr) {
+        return absl::InvalidArgumentError("Host vector for a locality contains null host");
+      }
       host_sum += host->weight();
       if (host_sum > std::numeric_limits<uint32_t>::max()) {
         return absl::InvalidArgumentError(
