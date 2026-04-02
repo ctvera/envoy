@@ -362,6 +362,9 @@ TypedHashLbConfigBase::TypedHashLbConfigBase(absl::Span<const HashPolicyProto* c
 absl::Status TypedHashLbConfigBase::validateEndpoints(const PriorityState& priorities) const {
 
   for (const auto& [hosts, locality_weights_map] : priorities) {
+    if (hosts == nullptr) {
+      continue;
+    }
     // Sum should be at most uint32_t max value, so we can validate it by accumulating into uint64_t
     // and making sure there was no overflow.
     uint64_t host_sum = 0;
